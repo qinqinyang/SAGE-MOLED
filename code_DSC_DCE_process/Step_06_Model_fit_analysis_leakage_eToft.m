@@ -1,5 +1,5 @@
 clc,clear,close all;
-fn = 'F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub23_胶质瘤\DCE_eToft_AIF_T1_real_for_analysis_analysis.mat';
+fn = 'DCE_eToft_AIF_T1_real_for_analysis_analysis.mat';
 load(fn);
 
 figure;

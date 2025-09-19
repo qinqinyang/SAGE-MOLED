@@ -3,11 +3,11 @@
 
 clear,clc;close all;
 
-fn_T2T2star = 'F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub07_脑膜瘤\meas_MID02719_FID1377060_a_sage_oled_1954_IPAT2_Dynamic_SENSE_Charles_T2T2star\';
+fn_T2T2star = 'meas_MID02719_FID1377060_a_sage_oled_Dynamic_Charles_T2T2star\';
 fn=[fn_T2T2star,'slice_006.mat'];
 
-fn_DCE = 'F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub07_脑膜瘤\DCE_eToft_AIF_01_T1_1_9.mat';
-fn_AIF='F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub07_脑膜瘤\AIF_filter.mat';
+fn_DCE = 'DCE_eToft_AIF_01_T1.mat';
+fn_AIF='AIF_filter.mat';
 
 load(fn);
 load(fn_DCE);

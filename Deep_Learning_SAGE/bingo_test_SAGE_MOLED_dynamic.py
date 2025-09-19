@@ -22,7 +22,7 @@ def load_data_Charles_test(image_path, config):
     data_pairs = data_in.reshape(config.INPUT_H, config.INPUT_W, config.DATA_C)
     input_sets = data_pairs[:, :, 0:6]
     input_sets = np.transpose(input_sets,[2,0,1])
-    print(input_sets.max())
+    #print(input_sets.max())
     #input_sets = input_sets / input_sets.max()
     input_sets = input_sets * 0.8
 
@@ -72,30 +72,24 @@ def get_loader(config, crop_key, num_workers, shuffle=False):
     return data_loader
 
 def test(config):
-    #-----选择GPU-----#
     os.environ['CUDA_VISIBLE_DEVICES'] = config.GPU_NUM
 
-    #-----使每次生成的随机数相同-----#
     np.random.seed(1)
     torch.manual_seed(1)
 
-    # -----地址-----#
     model_dir = os.path.join(config.model_path, config.model_name)
     if not os.path.exists(model_dir):
         print('Model not found, please check you path to model')
         print(model_dir)
         os._exit(0)
 
-    #-----读取数据-----#
     test_batch = get_loader(config, crop_key=False, num_workers=1, shuffle=False)
 
-    #-----模型-----#
     net = Inference(config.INPUT_C,config.OUTPUT_C,config.FILTERS)
 
     if torch.cuda.is_available():
        net.cuda()
 
-    #-----载入模型参数-----#
     net.load_state_dict(torch.load(model_dir,map_location=torch.device('cpu')))
     print('Model parameters loaded!')
 
@@ -133,7 +127,6 @@ def test(config):
             else:
                 OUT_test = np.concatenate((SR.permute(2, 3, 0, 1).cpu().detach().numpy(), OUT_test), axis=2)
 
-        # -----保存为mat文件-----#
         matio.savemat(
             tarname,
             {
@@ -169,35 +162,11 @@ if __name__ == '__main__':
 
     config = parser.parse_args()
 
-    #config.model_name = 'OLED_sage_cx_brain_t2t2star_epoch_2800.pth'
-    #config.model_name = 'OLED_sage_siemens_phantom_t2t2star_IPAT3_epoch_2000.pth'
-    #config.model_name = 'OLED_paper_sage_1954_epoch_2000.pth'
-    #config.model_name = 'OLED_paper_sage_1776_epoch_2000.pth'
-    #config.model_name = 'OLED_paper_t2t2star_epoch_2000.pth'
-    #config.model_name = 'OLED_paper_1954_norm_M0_epoch_2000.pth'
-    #config.model_name = 'OLED_paper_t2t2star_M0_1echo1_epoch_2800.pth'
+    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2star_norm_R2AttUNet_lownoise.pth'
+    config.model_name = 'OLED_paper_1954_t1t2t2star_Mz_norm_R2AttUNet.pth'
 
-    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2star_norm_R2AttUNet_epoch_2800.pth'
-    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2star_norm_R2AttUNet_noTR_epoch_2800.pth'
-    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2star_norm_R2AttUNet_noTR_200_epoch_2800.pth'
-    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2star_norm_R2AttUNet_lownoise_epoch_2800.pth'
-    #config.model_name = 'OLED_paper_1954_t1t2t2star_Mz_norm_R2AttUNet_epoch_2800.pth'
-    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2starMz_norm_R2AttUNet_epoch_2800.pth'
-    config.model_name = 'SAGE_MOLED_Mz_R2AttUNet_simulation_epoch_2800.pth'
-
-    #config.model_name = 'OLED_paper_1954_T2_1echo3_epoch_2800.pth'
-    #config.model_name = 'OLED_paper_1954_T2star_1echo1_epoch_1200.pth'
-    #config.model_name = 'OLED_paper_1954_norm_M0_1echo1_epoch_1200.pth'
-    #config.model_name = 'OLED_paper_1954_noB0_M0_1echo3_epoch_2800.pth'
-    #config.model_name = 'OLED_sage_cx_brain_t2star_epoch_2400.pth'
-    #config.model_name = 'OLED_paper_t2t2star_epoch_2000.pth'
-    #config.model_name = 'OLED_paper_t2t2star_M0_1echo1_epoch_2800.pth'
-    #config.model_name = 'OLED_SAGE_rand_M0B2_norm_epoch_2400.pth'
-    #config.model_name = 'OLED_paper_1954_noB0_M0_1echo3_rand_epoch_2800.pth'
-    config.model_name = 'OLED_paper_sage_t2_t2star_type3_iters_1000000.pth'
-
-    config.test_dir = '/home/yqq/data_uci/a_SAGE_MOLED/20250619_SAGE不同调制/meas_MID00871_FID1901364_a_sage_oled_type3_dyn_SENSE_Charles/'
-    config.result_dir = '/home/yqq/data_uci/a_SAGE_MOLED/20250619_SAGE不同调制/meas_MID00871_FID1901364_a_sage_oled_type3_dyn_SENSE_t2t2star/'
+    config.test_dir = 'meas_MID00871_FID1901364_a_sage_oled_dyn_Charles/'
+    config.result_dir = 'meas_MID00871_FID1901364_a_sage_oled_dyn_t2t2star/'
 
 
     test(config)

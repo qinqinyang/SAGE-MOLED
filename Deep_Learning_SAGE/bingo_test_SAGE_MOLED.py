@@ -9,7 +9,7 @@ import argparse
 import scipy.io as matio
 
 from network.R2AttUNet_T2 import Inference
-from network.UNet import Inference
+#from network.UNet import Inference
 
 from tools.evaluation import *
 import numpy as np
@@ -71,30 +71,24 @@ def get_loader(config, crop_key, num_workers, shuffle=True):
     return data_loader
 
 def test(config):
-    #-----选择GPU-----#
     os.environ['CUDA_VISIBLE_DEVICES'] = config.GPU_NUM
 
-    #-----使每次生成的随机数相同-----#
     np.random.seed(1)
     torch.manual_seed(1)
 
-    # -----地址-----#
     model_dir = os.path.join(config.model_path, config.model_name)
     if not os.path.exists(model_dir):
         print('Model not found, please check you path to model')
         print(model_dir)
         os._exit(0)
 
-    #-----读取数据-----#
     test_batch = get_loader(config, crop_key=False, num_workers=1, shuffle=False)
 
-    #-----模型-----#
     net = Inference(config.INPUT_C,config.OUTPUT_C,config.FILTERS)
 
     if torch.cuda.is_available():
        net.cuda()
 
-    #-----载入模型参数-----#
     net.load_state_dict(torch.load(model_dir,map_location=torch.device('cpu')))
     print('Model parameters loaded!')
 
@@ -116,7 +110,6 @@ def test(config):
         else:
             OUT_test = np.concatenate((SR.permute(0, 2, 3, 1).cpu().detach().numpy(),OUT_test),axis=0)
 
-    #-----保存为mat文件-----#
     print('.' * 30)
     print('OUT_test:', OUT_test.shape)
     print('.' * 30)
@@ -156,21 +149,11 @@ if __name__ == '__main__':
 
     config = parser.parse_args()
 
-    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2star_T2T2star_noB1_epoch_2000.pth'
-    #config.model_name = 'OLED_paper_t2t2star_crop96_number_2700_iters_400000.pth'
-    #config.model_name = 'OLED_paper_B0_puret2star_iters_1100000.pth'
-    #config.model_name = 'OLED_paper_B0_puret2star_iters_1400000.pth'
-    #config.model_name = 'OLED_paper_B0_puret2star_vgg001_iters_500000.pth'
-    #config.model_name = 'OLED_paper_B0_puret2star_vgg001_iters_900000.pth'
-    #config.model_name = 'OLED_paper_sagems_t2_crop128_UNet_2echo_iters_1900000.pth'
-    #config.model_name = 'OLED_paper_sagems_t2_crop128_UNet_2echo_vvg_iters_900000.pth'
-    #config.model_name = 'OLED_paper_sagems_t2_crop128_UNet_2echo_vvg_001_iters_1000000.pth'
-    #config.model_name = 'OLED_paper_sagems_t2_crop128_UNet_2echo_vvg_0001_iters_1400000.pth'
-    config.model_name = 'OLED_paper_sage_t2_t2star_ori_iters_1000000.pth'
-    config.model_name = 'OLED_sage_siemens_phantom_t2t2star_epoch_2000.pth'
+    #config.model_name = 'OLED_paper_1954_t1t2t2star_t2t2star_norm_R2AttUNet_lownoise.pth'
+    config.model_name = 'OLED_paper_1954_t1t2t2star_Mz_norm_R2AttUNet.pth'
 
-    config.test_dir = '/home/yqq/data_uci/a_Flow_Simu/train_flow/'
-    config.result_dir = '/home/yqq/data_uci/a_Flow_Simu/train_flow_results/Phantom_t2t2star.mat'
+    config.test_dir = 'meas_MID00871_FID1901364_a_sage_oled_dyn_Charles/'
+    config.result_dir = 'meas_MID00871_FID1901364_a_sage_oled_dyn_t2t2star/'
 
 
     test(config)

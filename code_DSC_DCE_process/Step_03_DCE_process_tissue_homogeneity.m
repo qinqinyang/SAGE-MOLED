@@ -4,10 +4,10 @@
 
 clc,clear;close all;
 
-workpath = 'F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub07_脑膜瘤\meas_MID02719_FID1377060_a_sage_oled_1954_IPAT2_Dynamic_SENSE_Charles_Mz\';
+workpath = 'meas_MID02719_FID1377060_a_sage_oled_Dynamic_Charles_Mz\';
 fn=[workpath,'slice_006.mat'];
 
-workdir = 'F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub07_脑膜瘤\';
+workdir = 'Sub07\';
 fn_T1=[workdir,'T1_map.mat'];
 fn_AIF=[workdir,'AIF_filter.mat'];
 

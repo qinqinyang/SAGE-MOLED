@@ -1,8 +1,8 @@
 clear,clc;
 
-workpath = 'F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub23_胶质瘤\meas_MID00371_FID1534392_a_sage_oled_1954_IPAT2_Dynamic_SENSE_Charles_T2T2star\';
+workpath = 'meas_MID00371_FID1534392_a_sage_oled_Dynamic_Charles_T2T2star\';
 fn=[workpath,'slice_006.mat'];
-fn_AIF = 'F:\我的坚果云\论文-SAGE-MOLED\data_paper\Sub07_脑膜瘤\AIF_filter.mat';
+fn_AIF = 'AIF_filter.mat';
 
 load(fn);
 load(fn_AIF);
